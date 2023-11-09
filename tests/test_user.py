@@ -1,5 +1,3 @@
-import pytest
-
 from sqlalchemy.orm import Session
 
 from core.security import verify_password
@@ -42,6 +40,17 @@ def test_get_many(session: Session):
 
     assert type(users) is list
     assert users
+
+
+def test_get_by_email(session: Session):
+    user: models.User = crud.user.get_by_email(
+        session, email="johndoe@email.com"
+    )
+
+    assert user.full_name == "John Doe"
+    assert user.email == "johndoe@email.com"
+    assert verify_password("testpassword", user.hashed_password)
+    assert user.is_active is False
 
 
 def test_update(session: Session):
