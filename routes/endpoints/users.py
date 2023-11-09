@@ -131,16 +131,6 @@ def read_user_by_id(
     Get a specific user by id.
     """
     user = crud.user.get(db, id=user_id)
-    if user == current_user:
-        return user
-    if (
-        current_user.user_type_id != models.user_type.UserTypes.ADMIN.value
-        and current_user.user_type_id
-        != models.user_type.UserTypes.HOTEL_ADMIN.value
-    ):
-        raise HTTPException(
-            status_code=403, detail="The user doesn't have enough privileges"
-        )
     return user
 
 
