@@ -1,8 +1,21 @@
-from sqlalchemy.orm import Session
+import pytest
 
 import crud
 import models
 import schemas
+
+from sqlalchemy.orm import Session
+
+
+@pytest.fixture(scope="module", autouse=True)
+def add_item_data(session: Session):
+    db_item: models.Item = models.Item(
+        id=100,
+        name="existing item",
+        description="existing item description",
+    )
+    session.add(db_item)
+    session.commit()
 
 
 def test_create(session: Session):

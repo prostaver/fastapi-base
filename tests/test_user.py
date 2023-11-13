@@ -1,9 +1,26 @@
-from sqlalchemy.orm import Session
+import pytest
 
-from core.security import verify_password
 import crud
 import schemas
 import models
+
+from sqlalchemy.orm import Session
+
+from core.security import get_password_hash, verify_password
+
+
+@pytest.fixture(scope="module", autouse=True)
+def add_user_data(session: Session):
+    db_user: models.User = models.User(
+        id=100,
+        full_name="John Doe",
+        email="johndoe@email.com",
+        hashed_password=get_password_hash("testpassword"),
+        is_active=False,
+    )
+    session.add(db_user)
+    session.commit()
+
 
 
 def test_create(session: Session):
